@@ -15,7 +15,7 @@ func RecordsConnectCmdlineHandler(args []string) error {
 
 func RecordsCmdlineHandler(args []string) error {
 	commands := utils.CommandMap{
-		"connect": utils.CommandDetails{RecordsConnectCmdlineHandler, "tooling for OGC API Records"},
+		"connect": utils.CommandDetails{RecordsConnectCmdlineHandler, "connect to the Catalogue server"},
 	}
 	return utils.HandleCmdline(args, &commands)
 }
