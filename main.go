@@ -11,8 +11,8 @@ import (
 	"github.com/rconway/eogo/utils"
 )
 
-func usage(commands *utils.CommandMap, w io.Writer) {
-	fmt.Fprintf(w, "Usage:\n%v <command> <options>\n", filepath.Base(os.Args[0]))
+func usage(args []string, commands *utils.CommandMap, w io.Writer) {
+	fmt.Fprintf(w, "Usage:\n%v <command> <options>\n", filepath.Base(args[0]))
 	fmt.Fprintln(w, "  <command> is one of...")
 	for k, v := range *commands {
 		fmt.Fprintf(w, "    %v: %v\n", k, v.Description)
@@ -25,9 +25,8 @@ func main() {
 		"records": utils.CommandDetails{records.RecordsCmdlineHandler, "tooling for OGC API Records"},
 		"process": utils.CommandDetails{process.ProcessCmdlineHandler, "tooling for OGC API Processes"},
 	}
-	err := utils.HandleCmdline(os.Args, &commands)
+	err := utils.HandleCmdline(os.Args, &commands, usage, os.Stdout)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
-		usage(&commands, os.Stdout)
 	}
 }

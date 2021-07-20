@@ -1,8 +1,11 @@
 package process
 
-import "flag"
+import (
+	"flag"
+	"io"
+)
 
-func ProcessCmdlineHandler(args []string) error {
+func ProcessCmdlineHandler(args []string, w io.Writer) error {
 	flagSet := flag.NewFlagSet("process", flag.ExitOnError)
 	var serverUrl string
 	flagSet.StringVar(&serverUrl, "server", "http://localhost", "Specify the Process server URL")
