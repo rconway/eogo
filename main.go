@@ -20,13 +20,17 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
-func main() {
+func processCmdline(args []string, w io.Writer) {
 	commands := utils.CommandMap{
-		"records": utils.CommandDetails{records.RecordsCmdlineHandler, "tooling for OGC API Records"},
-		"process": utils.CommandDetails{process.ProcessCmdlineHandler, "tooling for OGC API Processes"},
+		"records": utils.CommandDetails{Handler: records.RecordsCmdlineHandler, Description: "tooling for OGC API Records"},
+		"process": utils.CommandDetails{Handler: process.ProcessCmdlineHandler, Description: "tooling for OGC API Processes"},
 	}
-	err := utils.HandleCmdline(os.Args, &commands, usage, os.Stdout)
+	err := utils.HandleCmdline(args, &commands, usage, w)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
 	}
+}
+
+func main() {
+	processCmdline(os.Args, os.Stdout)
 }

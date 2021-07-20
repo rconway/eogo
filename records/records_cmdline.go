@@ -18,7 +18,7 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
-func RecordsConnectCmdlineHandler(args []string, w io.Writer) error {
+func recordsConnectCmdlineHandler(args []string, w io.Writer) error {
 	flagSet := flag.NewFlagSet("connect", flag.ExitOnError)
 	var serverUrl string
 	flagSet.StringVar(&serverUrl, "server", "http://localhost", "Specify the Catalogue server URL")
@@ -27,7 +27,7 @@ func RecordsConnectCmdlineHandler(args []string, w io.Writer) error {
 
 func RecordsCmdlineHandler(args []string, w io.Writer) error {
 	commands := utils.CommandMap{
-		"connect": utils.CommandDetails{RecordsConnectCmdlineHandler, "connect to the Catalogue server"},
+		"connect": utils.CommandDetails{Handler: recordsConnectCmdlineHandler, Description: "connect to the Catalogue server"},
 	}
 	return utils.HandleCmdline(args, &commands, usage, w)
 }

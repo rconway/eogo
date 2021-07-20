@@ -18,7 +18,7 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
-func ProcessConnectCmdlineHandler(args []string, w io.Writer) error {
+func processConnectCmdlineHandler(args []string, w io.Writer) error {
 	flagSet := flag.NewFlagSet("connect", flag.ExitOnError)
 	var serverUrl string
 	flagSet.StringVar(&serverUrl, "server", "http://localhost", "Specify the Processing server URL")
@@ -27,7 +27,7 @@ func ProcessConnectCmdlineHandler(args []string, w io.Writer) error {
 
 func ProcessCmdlineHandler(args []string, w io.Writer) error {
 	commands := utils.CommandMap{
-		"connect": utils.CommandDetails{ProcessConnectCmdlineHandler, "connect to the Processing server"},
+		"connect": utils.CommandDetails{Handler: processConnectCmdlineHandler, Description: "connect to the Processing server"},
 	}
 	return utils.HandleCmdline(args, &commands, usage, w)
 }
