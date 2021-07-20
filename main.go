@@ -20,17 +20,27 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
-func processCmdline(args []string, w io.Writer) {
+func processCmdline(args []string, w io.Writer) (utils.CommandExecutor, error) {
 	commands := utils.CommandMap{
 		"records": utils.CommandDetails{Handler: records.RecordsCmdlineHandler, Description: "tooling for OGC API Records"},
 		"process": utils.CommandDetails{Handler: process.ProcessCmdlineHandler, Description: "tooling for OGC API Processes"},
 	}
-	err := utils.HandleCmdline(args, &commands, usage, w)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
-	}
+	return utils.HandleCmdline(args, &commands, usage, w)
 }
 
 func main() {
-	processCmdline(os.Args, os.Stdout)
+	outWriter := os.Stdout
+
+	cmdExe, err := processCmdline(os.Args, outWriter)
+	if err == nil {
+		if cmdExe != nil {
+			err = cmdExe.Execute()
+		} else {
+			err = fmt.Errorf("the command executor is nil")
+		}
+	}
+
+	if err != nil {
+		fmt.Fprintf(outWriter, "ERROR: %v\n", err)
+	}
 }
