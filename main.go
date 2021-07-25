@@ -20,10 +20,15 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
+// Receives the full program command-line
 func processCmdline(args []string, w io.Writer) (utils.CommandExecutor, error) {
 	commands := utils.CommandMap{
 		"records": utils.CommandDetails{Handler: records.RecordsCmdlineHandler, Description: "tooling for OGC API Records"},
 		"process": utils.CommandDetails{Handler: process.ProcessCmdlineHandler, Description: "tooling for OGC API Processes"},
+	}
+	if len(args) < 2 {
+		usage(args, &commands, w)
+		return nil, fmt.Errorf("no command specified")
 	}
 	return utils.HandleCmdline(args, &commands, usage, w)
 }

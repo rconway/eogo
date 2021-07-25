@@ -20,6 +20,7 @@ type CommandExecutor interface {
 	Execute() error
 }
 
+// Expects: args[0] = main command, arg[1] = subcommand / flags
 func HandleCmdline(args []string, commands *CommandMap, usageFn UsageFunction, w io.Writer) (CommandExecutor, error) {
 	// Missing command
 	if len(args) < 2 {

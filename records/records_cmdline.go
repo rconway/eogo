@@ -18,13 +18,20 @@ func usage(args []string, commands *utils.CommandMap, w io.Writer) {
 	fmt.Fprintln(w, "  <options> varies for each command")
 }
 
+// Expects: args[0] = 'connect', args[1:] = flags
 func recordsConnectCmdlineHandler(args []string, w io.Writer) (utils.CommandExecutor, error) {
 	flagSet := flag.NewFlagSet("connect", flag.ExitOnError)
 	var serverUrl string
 	flagSet.StringVar(&serverUrl, "server", "http://localhost", "Specify the Catalogue server URL")
-	return &RecordsConnect{Server: serverUrl}, flagSet.Parse(args)
+	err := flagSet.Parse(args[1:])
+	var cmdExe RecordsConnect
+	if err == nil {
+		cmdExe = RecordsConnect{Server: serverUrl}
+	}
+	return &cmdExe, err
 }
 
+// Expects: args[0] = 'records', args[1] = subcommand
 func RecordsCmdlineHandler(args []string, w io.Writer) (utils.CommandExecutor, error) {
 	commands := utils.CommandMap{
 		"connect": utils.CommandDetails{Handler: recordsConnectCmdlineHandler, Description: "connect to the Catalogue server"},
